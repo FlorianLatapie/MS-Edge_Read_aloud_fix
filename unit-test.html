@@ -1,0 +1,49 @@
+<!-- from https://blog.orange.tw/posts/2024-08-confusion-attacks-en/-->
+<html>
+
+<head>
+    <title>Unit Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <meta charset="utf-8">
+</head>
+
+<table>
+    <tbody>
+        <tr>
+            <td class="gutter">
+                <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre>
+            </td>
+            <td class="code">
+                <pre><span class="line"><span class="comment"># Using (?:pattern) instead of (pattern) is a small optimization that</span></span><br><span class="line"><span class="comment"># avoid capturing the matching pattern (as $1) which isn't used here</span></span><br><span class="line"><span class="section">&lt;FilesMatch <span class="string">".+\.ph(?:ar|p|tml)$"</span>&gt;</span></span><br><span class="line">    <span class="attribute">SetHandler</span> <span class="string">"proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"</span></span><br><span class="line"><span class="section">&lt;/FilesMatch&gt;</span></span><br></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+    <tbody>
+        <tr>
+            <td class="gutter" aria-hidden="true">
+                <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre>
+            </td>
+            <td class="code">
+                <pre><span class="line"><span class="keyword">if</span> ((ret = ap_scan_script_header_err_brigade_ex(r, bb, sbuf,          <span class="comment">// ≺------ [1]</span></span><br><span class="line">                                                APLOG_MODULE_INDEX)))</span><br><span class="line">{</span><br><span class="line">    ret = log_script(r, conf, ret, dbuf, sbuf, bb, script_err);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret == HTTP_NOT_MODIFIED) {</span><br><span class="line">        r→status = ret;</span><br><span class="line">        <span class="keyword">return</span> OK;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">location = apr_table_get(r→headers_out, <span class="string">"Location"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (location &amp;&amp; r→status == <span class="number">200</span>) {</span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (location &amp;&amp; location[<span class="number">0</span>] == <span class="string">'/'</span> &amp;&amp; r→status == <span class="number">200</span>) {          <span class="comment">// ≺------ [2]</span></span><br><span class="line">    <span class="comment">/* This redirect needs to be a GET no matter what the original</span></span><br><span class="line"><span class="comment">     * method was.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    r→method = <span class="string">"GET"</span>;</span><br><span class="line">    r→method_number = M_GET;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* We already read the message body (if any), so don't allow</span></span><br><span class="line"><span class="comment">     * the redirected request to think it has one.  We can ignore</span></span><br><span class="line"><span class="comment">     * Transfer-Encoding, since we used REQUEST_CHUNKED_ERROR.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    apr_table_unset(r→headers_in, <span class="string">"Content-Length"</span>);</span><br><span class="line"></span><br><span class="line">    ap_internal_redirect_handler(location, r);                     <span class="comment">// ≺------ [3]</span></span><br><span class="line">    <span class="keyword">return</span> OK;</span><br><span class="line">}</span><br></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table>
+    <tbody>
+        <tr>
+            <td class="gutter" aria-hidden="true">
+                <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre>
+            </td>
+            <td class="code">
+                <pre><span class="line"><span class="keyword">if</span> ((ret = ap_scan_script_header_err_brigade_ex(r, bb, sbuf,          <span class="comment">// ≺------ [1]</span></span><br><span class="line">                                                APLOG_MODULE_INDEX)))</span><br><span class="line">{</span><br><span class="line">    ret = log_script(r, conf, ret, dbuf, sbuf, bb, script_err);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret == HTTP_NOT_MODIFIED) {</span><br><span class="line">        r→status = ret;</span><br><span class="line">        <span class="keyword">return</span> OK;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">location = apr_table_get(r→headers_out, <span class="string">"Location"</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (location &amp;&amp; r→status == <span class="number">200</span>) {</span><br><span class="line">    <span class="comment">// [...]</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (location &amp;&amp; location[<span class="number">0</span>] == <span class="string">'/'</span> &amp;&amp; r→status == <span class="number">200</span>) {          <span class="comment">// ≺------ [2]</span></span><br><span class="line">    <span class="comment">/* This redirect needs to be a GET no matter what the original</span></span><br><span class="line"><span class="comment">     * method was.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    r→method = <span class="string">"GET"</span>;</span><br><span class="line">    r→method_number = M_GET;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* We already read the message body (if any), so don't allow</span></span><br><span class="line"><span class="comment">     * the redirected request to think it has one.  We can ignore</span></span><br><span class="line"><span class="comment">     * Transfer-Encoding, since we used REQUEST_CHUNKED_ERROR.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    apr_table_unset(r→headers_in, <span class="string">"Content-Length"</span>);</span><br><span class="line"></span><br><span class="line">    ap_internal_redirect_handler(location, r);                     <span class="comment">// ≺------ [3]</span></span><br><span class="line">    <span class="keyword">return</span> OK;</span><br><span class="line">}</span><br></pre>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</html>
